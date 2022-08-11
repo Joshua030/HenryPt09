@@ -16,6 +16,9 @@ Para ejecutar los test, anda a esta carpeta y ejecutá:
 Crear un método `repeatify` que este disponible para _todos_ los objetos `Strings`. Esta función debe aceptar un `entero` que indica cuantas veces el string tiene que repetirse. La función retorna el string repetido el número de veces que indicamos. Controlar que el número no sea menor que cero, y si es cero que devuelva `''` (String vacío).
 
 ```javascript
+String.prototype.repeatify = function(n) {
+  return this.repeat(n)
+} 
 console.log('hola'.repeatify(3));   //holaholahola
 ```
 
@@ -26,6 +29,32 @@ console.log('hola'.repeatify(3));   //holaholahola
 * Agregá un nuevo método al prototipo llamado `getPerimeter`.
 
 Probá tu solución con el siguiente código:
+
+function Shape() {
+  type = "Shape";
+ 
+}
+
+Shape.prototype.getType = function() {
+    return  this.type;
+  }
+
+function Triangle(a, b, c) {
+  Shape.call(this)
+  this.a = a;
+  this.b = b;
+  this.c = c;
+  this.type = "Triangle";
+}
+
+Triangle.prototype = Object.create(Shape.prototype);
+
+Triangle.prototype.constructor = Triangle;
+
+Triangle.prototype.getPerimeter = function() {
+  return this.a + this.b + this.c;
+}
+
 
 ```javascript
 > var t = new Triangle(1, 2, 3);
@@ -42,6 +71,17 @@ Probá tu solución con el siguiente código:
 * Ahora creá un nuevo constructor que herede de `shape`, llamado `Circle`. Implementalo de tal modo que puedas calcular su perímetro en la función `getPerimeter`.
 
 Probá tu solución con el siguiente código:
+
+function Circle(a) {
+  Shape.call(this)
+  this.a = a;
+  this.type = "Circle";
+}
+Circle.prototype = Object.create(Shape.prototype);
+
+Circle.prototype.constructor = Circle;
+
+Circle.prototype.getPerimeter = function() { return 2 * Math.PI * this.a ;} 
 
 ```javascript
 > var c = new Circle(2);
