@@ -11,9 +11,69 @@ Implementar la clase LinkedList, definiendo los siguientes métodos:
   En caso de que la búsqueda no arroje resultados, search debe retornar null.
 */
 
-function LinkedList() {}
+function LinkedList(head=null) {
+  this.head = head
+}
 
-function Node(value) {}
+function Node(value) {
+        this.value = value
+        this.next = null
+}
+
+LinkedList.prototype.add = function (new_data){
+    let new_node = new Node(new_data);
+    if (this.head == null){
+        this.head = new Node(new_data);
+        return;
+    }
+    new_node.next = null;
+    let last = this.head; 
+    while (last.next != null)
+        last = last.next;
+    last.next = new_node;
+    return;
+}
+
+LinkedList.prototype.remove = function ( ){
+  if (!this.head) {
+    return null ;
+  }
+  if (!this.head.next ) {
+    let result =  this.head.value ;
+    this.head = null;
+    return result;
+  }
+  let previous= this.head;
+  let node = this.head.next ;
+  while (node.next ) {
+    previous = node ;
+    node=node.next;
+  }
+  let result = previous.next.value;
+  previous.next = null;
+  return result;
+}
+
+LinkedList.prototype.search =  function (x) {
+  let currentNode = this.head ;
+  if(typeof(x)=== "number" || typeof(x)=== "string"){
+while (currentNode) {
+  if (currentNode.value === x) {
+    return currentNode.value ;
+  }
+currentNode = currentNode.next ;
+}
+return null ;
+} else {
+  while (currentNode) {
+if (x(currentNode.value) === true) {
+  return currentNode.value ;
+}
+currentNode = currentNode.next ;
+}
+return null ;
+}
+}
 
 /*
 Implementar la clase HashTable.
@@ -30,7 +90,69 @@ La clase debe tener los siguientes métodos:
 Ejemplo: supongamos que quiero guardar {instructora: 'Ani'} en la tabla. Primero puedo chequear, con hasKey, si ya hay algo en la tabla con el nombre 'instructora'; luego, invocando set('instructora', 'Ani'), se almacenará el par clave-valor en un bucket específico (determinado al hashear la clave)
 */
 
-function HashTable() {}
+function HashTable() {
+  this.table = new Array(35);
+    this.size = 0;
+    this.numBuckets = new Array(35).length;
+  }
+
+  HashTable.prototype.hash= function (key) {
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash += key.charCodeAt(i);
+    }
+    return hash % this.table.length;
+  }
+
+  HashTable.prototype.set = function (key, value) {
+    if (typeof(key) !== "string"){
+      throw TypeError();
+    }
+    const index = this.hash(key);
+  if (this.table[index]) {
+    for (let i = 0; i < this.table[index].length; i++) {
+      // Find the key/value pair in the chain
+      if (this.table[index][i][0] === key) {
+        this.table[index][i][1] = value;
+        return;
+      }
+    }
+    // not found, push a new key/value pair
+    this.table[index].push([key, value]);
+  } else {
+    this.table[index] = [];
+    this.table[index].push([key, value]);
+  }
+  this.size++;
+
+}
+
+  
+
+  HashTable.prototype.get = function (key) {
+    const target = this.hash(key);
+  if (this.table[target]) {
+    for (let i = 0; i < this.table.length; i++) {
+      if (this.table[target][i][0] === key) {
+        return this.table[target][i][1];
+      }
+    }
+  }
+  return undefined;
+}
+
+  HashTable.prototype.hasKey = function (key) {
+    const target = this.hash(key);
+    if (this.table[target]) {
+      for (let i = 0; i < this.table.length; i++) {
+        if (this.table[target][i][0] === key) {
+          return true
+        }
+        return false;
+      }
+    }
+  } 
+ 
 
 // No modifiquen nada debajo de esta linea
 // --------------------------------
